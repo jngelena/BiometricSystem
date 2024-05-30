@@ -115,10 +115,10 @@ class _HomeState extends State<Home> {
                   onPressed: () async {
                     await _onStartLivelyness();
                     if (_capturedImagePath != null) {
-                      // Navigator.push(context,
-                      //     MaterialPageRoute(builder: (BuildContext _build) {
-                      //   return SignUpPage(imagePath: _capturedImagePath!);
-                      // }));
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (BuildContext _build) {
+                        return SignUpPage(imagePath: _capturedImagePath!);
+                      }));
                     }
                   },
                   isOutlined: true,
