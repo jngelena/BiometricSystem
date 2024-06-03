@@ -1,5 +1,7 @@
 import 'package:app/firebase_options.dart';
 import 'package:app/screen/home_page.dart';
+import 'package:app/screen/log_in.dart';
+import 'package:app/screen/sign_up.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -16,9 +18,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'B-Voting biometric System',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        scaffoldBackgroundColor: Colors.white,
         useMaterial3: true,
       ),
       home: const Home(),
