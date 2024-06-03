@@ -1,5 +1,5 @@
 import 'package:app/components/components.dart';
-import 'package:app/screen/image_file_screen.dart';
+import 'package:app/screen/sign_up.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:m7_livelyness_detection/index.dart';
@@ -115,10 +115,10 @@ class _HomeState extends State<Home> {
                   onPressed: () async {
                     await _onStartLivelyness();
                     if (_capturedImagePath != null) {
-                      // Navigator.push(context,
-                      //     MaterialPageRoute(builder: (BuildContext _build) {
-                      //   return SignUpPage(imagePath: _capturedImagePath!);
-                      // }));
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (BuildContext _build) {
+                        return SignUpPage(imagePath: _capturedImagePath!);
+                      }));
                     }
                   },
                   isOutlined: true,

@@ -4,12 +4,13 @@ import "package:http/http.dart" as http;
 import "package:m7_livelyness_detection/index.dart";
 
 class DeepFaceApi {
-  // 172.20.10.7
+  // should be the IP address of the machine if we are using localhost
   final String _basePath = "http://10.10.23.228:8080";
 
   // convert image from path into a base64, then it can be feeded to the API
 
   Future<String> convertImageFromPath(String imagePath) async {
+    // line 13 - 18, Is used for transforming image in the asset to device
     final byteData = await rootBundle.load("assets/$imagePath");
     final file = File("${(await getTemporaryDirectory()).path}/$imagePath");
     await file.create(recursive: true);
