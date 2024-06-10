@@ -1,6 +1,12 @@
+import 'dart:developer';
 import 'package:app/components/components.dart';
+import 'package:app/model/user.dart';
+import 'package:app/screen/log_in.dart';
 import 'package:app/screen/sign_up.dart';
+import 'package:app/service/Firebase_database.dart';
+import 'package:app/service/deep_face_api.dart';
 import 'package:camera/camera.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:m7_livelyness_detection/index.dart';
 
@@ -18,6 +24,9 @@ class _HomeState extends State<Home> {
   final bool _isLoading = false;
   final bool _clickedFromRegistrationButton = false;
   final bool _clickedfromLoginButton = false;
+  FirebaseMethods? firebaseInstance;
+  DeepFaceApi? deepFaceApi;
+
   bool _startWithInfo = true;
   bool _allowAfterTimeOut = false;
   int _timeOutDuration = 15;
@@ -26,15 +35,17 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     _initValues();
+    firebaseInstance = FirebaseMethods();
+    deepFaceApi = DeepFaceApi();
     super.initState();
   }
 
   void _initValues() {
     _verificationSteps.addAll([
       M7LivelynessStepItem(
-          step: M7LivelynessStep.smile, title: "Smile", isCompleted: false),
-      M7LivelynessStepItem(
           step: M7LivelynessStep.blink, title: "Blink", isCompleted: false),
+      M7LivelynessStepItem(
+          step: M7LivelynessStep.smile, title: "Smile", isCompleted: false),
     ]);
     M7LivelynessDetection.instance.configure(
       thresholds: [
@@ -66,6 +77,13 @@ class _HomeState extends State<Home> {
       _capturedImagePath = response.imgPath!;
       print("The image path that has been captured: ${_capturedImagePath}");
     });
+  }
+
+  void _write(String text) async {
+    final directory = Directory.current.path;
+    final File file = File('${directory}my_file.txt');
+    print('${directory}my_file.txt');
+    await file.writeAsString(text);
   }
 
   @override
@@ -105,7 +123,46 @@ class _HomeState extends State<Home> {
                 ),
                 CustomButton(
                   buttonText: "Login",
-                  onPressed: () {},
+                  onPressed: () async {
+                    List<User> documents =
+                        await firebaseInstance!.getUsersFromFirestore();
+                    await _onStartLivelyness();
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        backgroundColor: Colors.black,
+                        content: Text(
+                          "Processing the data for Log In",
+                          style: TextStyle(fontSize: 20, color: Colors.white),
+                        )));
+                    if (_capturedImagePath != null) {
+                      final file = File(_capturedImagePath!);
+                      Uint8List filebytes = file.readAsBytesSync();
+                      String base64FileBytes = base64Encode(filebytes);
+                      for (var i = 0; i < documents.length; i++) {
+                        bool reply = await deepFaceApi!
+                            .verifyFace(base64FileBytes, documents[i].image);
+                        if (reply == true) {
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: ((context) => VotingPage(
+                                        user: documents[i],
+                                      ))));
+                        } else if (i + 1 == documents.length &&
+                            reply == false) {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                                  backgroundColor: Colors.black,
+                                  content: Text(
+                                    "You are not Registered!",
+                                    style: TextStyle(
+                                        fontSize: 20, color: Colors.white),
+                                  )));
+                        }
+                      }
+                    }
+                    print(
+                        "There is document from firestore: ${documents[0].image}");
+                  },
                 ),
                 const SizedBox(
                   height: 10,
