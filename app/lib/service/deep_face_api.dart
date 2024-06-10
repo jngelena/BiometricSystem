@@ -5,25 +5,24 @@ import "package:m7_livelyness_detection/index.dart";
 
 class DeepFaceApi {
   // should be the IP address of the machine if we are using localhost
-  final String _basePath = "http://10.10.23.228:8080";
+  final String _basePath = "http://192.168.1.11:8080";
 
-  // convert image from path into a base64, then it can be feeded to the API
+  // convert image from path into abase64, then it can be feeded to the API
 
-  Future<String> convertImageFromPath(String imagePath) async {
+  Future<String> convertImageFromPath(String base64Image) async {
     // line 13 - 18, Is used for transforming image in the asset to device
-    final byteData = await rootBundle.load("assets/$imagePath");
-    final file = File("${(await getTemporaryDirectory()).path}/$imagePath");
-    await file.create(recursive: true);
-    await file.writeAsBytes(byteData.buffer
-        .asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
-    Uint8List bytes = file.readAsBytesSync();
-    String base64Image = base64Encode(bytes);
+    // final byteData = await rootBundle.load("assets/$imagePath");
+    // final file = File("${(await getTemporaryDirectory()).path}/$imagePath");
+    // await file.create(recursive: true);
+    // await file.writeAsBytes(byteData.buffer
+    //     .asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
+    // Uint8List bytes = file.readAsBytesSync();
+    // String base64Image = base64Encode(bytes);
     String base64ImageApiFormat = "data:image/jpeg;base64,${base64Image}";
-    debugPrint(base64ImageApiFormat);
     return base64ImageApiFormat;
   }
 
-  Future<void> verifyFace(String imagePath1, String imagePath2) async {
+  Future<bool> verifyFace(String imagePath1, String imagePath2) async {
     Map<String, String> headers = <String, String>{
       "Content-Type": "application/json"
     };
@@ -44,7 +43,12 @@ class DeepFaceApi {
       http.Response res = await http.post(url, body: msg, headers: headers);
       switch (res.statusCode) {
         case HttpStatus.ok:
-          print("Response from the API${res.body}");
+          final response = json.decode(res.body);
+          if (response['verified'] == true) {
+            return true;
+          } else {
+            return false;
+          }
         default:
           throw UnexpectedResponseException(
               "unexpected HTTP status : ${res.statusCode} ${res.reasonPhrase}");
