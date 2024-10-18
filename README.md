@@ -2,6 +2,8 @@
 
 File **evaluation.ipynb** evaluates a face recognition system using the Deepface framework in an open-set identification task. The evaluation focuses on detecting whether a user is registered in the system using performance metrics calculated on the Labeled Faces in the Wild (LFW) dataset.
 
+Folder **app** contains a mobile application designed to provide a secure and accessible blockchain-based e-voting system that utilizes face recognition for voter authentication. The app is built using Flutter and integrates advanced biometric and blockchain technologies to ensure a robust and tamper-proof voting process.
+
 ## Abstract
 The evaluation task is an open-set face recognition (1:N) scenario where unregistered users can interact with the system. The project leverages the **Deepface** framework and specifically uses the **GhostFaceNet** model, known for its high performance on the LFW dataset. The evaluation involves comparing all probe templates with all gallery templates, using a range of thresholds to assess the model's accuracy.
 
