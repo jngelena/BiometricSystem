@@ -1,6 +1,6 @@
-# Biometric Systems Evaluation
+# Biometric Systems
 
-This project evaluates a face recognition system using the Deepface framework in an open-set identification task. The evaluation focuses on detecting whether a user is registered in the system using performance metrics calculated on the Labeled Faces in the Wild (LFW) dataset.
+File **evaluation.ipynb** evaluates a face recognition system using the Deepface framework in an open-set identification task. The evaluation focuses on detecting whether a user is registered in the system using performance metrics calculated on the Labeled Faces in the Wild (LFW) dataset.
 
 ## Abstract
 The evaluation task is an open-set face recognition (1:N) scenario where unregistered users can interact with the system. The project leverages the **Deepface** framework and specifically uses the **GhostFaceNet** model, known for its high performance on the LFW dataset. The evaluation involves comparing all probe templates with all gallery templates, using a range of thresholds to assess the model's accuracy.
