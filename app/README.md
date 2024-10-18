@@ -1,8 +1,5 @@
 # Blockchain E-Voting System Using Face Recognition
 
-This project is a mobile application designed to provide a secure and accessible blockchain-based e-voting system that utilizes face recognition for voter authentication. The app is built using Flutter and integrates advanced biometric and blockchain technologies to ensure a robust and tamper-proof voting process.
-
-## Project Overview
 The goal of this project is to create a secure e-voting system that uses face recognition for biometric verification and blockchain technology for vote integrity and transparency. The app allows voters to register, authenticate, and cast their votes securely through their mobile devices.
 
 ## Features
